@@ -12,9 +12,9 @@ public class WordSelect {
 
     private static final String FILE_PATH = "src/main/java/org/example/WordsList.txt";
 
-    public static String getWord() {
+    public static char[] getWord() {
         List<String> wordsList = readWordsFromFile();
-        return randomWord(wordsList);
+        return randomWord(wordsList).toUpperCase().toCharArray();
     }
 
     private static List<String> readWordsFromFile() {
