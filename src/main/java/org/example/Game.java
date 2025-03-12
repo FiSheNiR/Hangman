@@ -1,33 +1,45 @@
 package org.example;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Game {
 
-    private static int errorCounter;
+    private static int mistakeCounter;
     private static int correctCounter;
+    private static final int MAX_MISTAKE_COUNT = 6;
 
     public static void start() {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         char[] secretWord = WordSelect.getWord();
         char[] maskedWord = maskWord(secretWord);
+        char[] wrongLetter = new char[MAX_MISTAKE_COUNT];
+        Map<String, Integer> duplicateLetters = new HashMap<>();
         System.out.println(secretWord);
         System.out.println(maskedWord);
+        Hangman.drawHangman(0);
 
         while (running) {
             String input = scanner.nextLine().toUpperCase();
-            if (!checkLetter(input,secretWord)) {
-                errorCounter++;
-                System.out.println("Такой буквы нет " + errorCounter);
-                //Рисуем виселицу
-            } else {
-                correctCounter++;
-                System.out.println("Есть такая буква " + correctCounter);
-                //showLetter
+            if (duplicateLetters.containsKey(input)) {
+                System.out.println("Вы уже вводили эту букву попробуйте еще раз");
+                continue;
             }
-            if (errorCounter == 3){
+            duplicateLetters.put(input, 0);
+            if (!checkLetter(input,secretWord,maskedWord)) {
+                wrongLetter[mistakeCounter] = input.charAt(0);
+                mistakeCounter++;
+                System.out.println("Такой буквы нет. Количество ошибок: " + mistakeCounter);
+                System.out.println("Ошибочные буквы: " + Arrays.toString(wrongLetter));
+                Hangman.drawHangman(mistakeCounter);
+            } else {
+                System.out.println("Есть такая буква. Колличество отгаданных букв: " + correctCounter);
+                System.out.println(maskedWord);
+            }
+            if (mistakeCounter == MAX_MISTAKE_COUNT) {
                 System.out.println("Вы проиграли");
                 running = false;
             }
@@ -44,16 +56,20 @@ public class Game {
         return maskedWord;
     }
 
-    public static boolean checkLetter(String input, char[] secretWord) {
-
-        char targetChar = input.charAt(0);
-
-        for (char c : secretWord) {
-            if (c == targetChar) {
-                return true;
+    private static boolean checkLetter(String input, char[] secretWord, char[] maskedWord) {
+        char inputChar = input.charAt(0);
+        boolean found = false;
+        for (int i = 0; i < secretWord.length; i++) {
+            if (secretWord[i] == inputChar) {
+                unmaskLetter(maskedWord, i,secretWord[i]);
+                correctCounter++;
+                found = true;
             }
         }
+        return found;
+    }
 
-        return false;
+    private static void unmaskLetter(char[] maskedWord, int index, char letter) {
+        maskedWord[index] = letter;
     }
 }

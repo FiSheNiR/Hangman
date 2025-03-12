@@ -7,6 +7,8 @@ public class Main {
     public static void main(String[] args) {
         startGame();
     }
+
+
     public static void startGame() {
         Scanner scanner = new Scanner(System.in);
         boolean game = true;
