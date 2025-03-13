@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-public class WordSelect {
+public class WordFromFile {
 
     private static final String FILE_PATH = "src/main/java/org/example/WordsList.txt";
 
-    public static char[] getWord() {
+    private final char[] secretWord = getRandomWord();
+
+    public static char[] getRandomWord() {
         List<String> wordsList = readWordsFromFile();
         return randomWord(wordsList).toUpperCase().toCharArray();
     }
@@ -21,12 +23,12 @@ public class WordSelect {
         List<String> words = new ArrayList<>();
         Pattern pattern = Pattern.compile("[^а-яА-Яa-zA-Z]+");
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(WordSelect.FILE_PATH, java.nio.charset.StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(WordFromFile.FILE_PATH, java.nio.charset.StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] wordArray = pattern.split(line);
                 for (String word : wordArray) {
-                    if (!word.isEmpty()) {
+                    if (word.length() >= 5 && word.matches("[а-яА-Я]+")) {
                         words.add(word);
                     }
                 }
@@ -41,5 +43,9 @@ public class WordSelect {
     private static String randomWord(List<String> words) {
         Random random = new Random();
         return words.get(random.nextInt(words.size()));
+    }
+
+    public char[] getSecretWord() {
+        return secretWord;
     }
 }
