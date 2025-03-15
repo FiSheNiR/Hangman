@@ -8,9 +8,11 @@ public class Game {
     private final WordFromFile wordFromFile;
     private final MaskWord maskWord;
     private final Hangman hangman;
+    private final List<String> wrongLetterList;
 
     Game() {
         correctCounter = 0;
+        this.wrongLetterList = new ArrayList<>();
         this.wordFromFile = new WordFromFile();
         this.maskWord = new MaskWord(wordFromFile.getSecretWord());
         this.hangman = new Hangman();
@@ -20,35 +22,16 @@ public class Game {
         Scanner scanner = new Scanner(System.in);
         InputHandler inputHandler = new InputHandler(scanner);
 
-        boolean running = true;
-
         Game gameState = new Game();
-        List<String> wrongLetterList = new ArrayList<>();
 
         System.out.println(gameState.wordFromFile.getSecretWord());
         System.out.println(gameState.maskWord);
 
-        while (running) {
+        while (gameResult(gameState)) {
             String userInput = inputHandler.getUserInput();
 
-            if (!gameState.checkLetter(userInput)) {
-                wrongLetterList.add(gameState.hangman.getMistakeNumber(), String.valueOf(userInput.charAt(0)));
-                gameState.hangman.addMistakeNumber();
-                System.out.println("Такой буквы нет. Количество ошибок: " + gameState.hangman.getMistakeNumber());
-                gameState.printGameState(wrongLetterList);
+            containLetter(gameState, userInput);
 
-            } else {
-                System.out.println("Есть такая буква. Колличество отгаданных букв: " + gameState.correctCounter);
-                gameState.printGameState(wrongLetterList);
-            }
-            if (gameState.hangman.getMistakeNumber() == gameState.hangman.maxMistakeNumber()) {
-                System.out.println("Вы проиграли");
-                running = false;
-            }
-            if (gameState.correctCounter == gameState.wordFromFile.getSecretWord().length){
-                System.out.println("Вы выйграли");
-                running = false;
-            }
         }
     }
 
@@ -70,5 +53,32 @@ public class Game {
         System.out.println("Ошибочные буквы: " + wrongLetterArray);
         System.out.println("Отгаданные буквы: " + maskWord);
         hangman.drawHangman();
+    }
+
+    private static void containLetter(Game gameState, String userInput) {
+        if (!gameState.checkLetter(userInput)) {
+            gameState.wrongLetterList.add(gameState.hangman.getMistakeNumber(), String.valueOf(userInput.charAt(0)));
+            gameState.hangman.addMistakeNumber();
+            System.out.println("Такой буквы нет. Количество ошибок: " + gameState.hangman.getMistakeNumber());
+            gameState.printGameState(gameState.wrongLetterList);
+
+        } else {
+            System.out.println("Есть такая буква. Колличество отгаданных букв: " + gameState.correctCounter);
+            gameState.printGameState(gameState.wrongLetterList);
+        }
+    }
+
+    private static boolean gameResult(Game gameState){
+        if (gameState.hangman.getMistakeNumber() == gameState.hangman.maxMistakeNumber()) {
+            System.out.print("Вы проиграли. Загаданнаое слово: ");
+            System.out.print(gameState.wordFromFile.getSecretWord());
+            System.out.println();
+            return false;
+        }
+        if (gameState.correctCounter == gameState.wordFromFile.getSecretWord().length){
+            System.out.println("Вы выйграли");
+            return false;
+        }
+        return true;
     }
 }
