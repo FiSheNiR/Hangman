@@ -11,8 +11,11 @@ import java.util.regex.Pattern;
 public class WordFromFile {
 
     private static final String FILE_PATH = "src/main/java/org/example/WordsList.txt";
+    private final char[] secretWord;
 
-    private final char[] secretWord = getRandomWord();
+    WordFromFile() {
+        this.secretWord = getRandomWord();
+    }
 
     public static char[] getRandomWord() {
         List<String> wordsList = readWordsFromFile();

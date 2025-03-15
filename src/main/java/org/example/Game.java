@@ -4,76 +4,71 @@ import java.util.*;
 
 public class Game {
 
-    private static int correctCounter;
-    private static final int HANGMAN_START_POSITION = 0;
+    private int correctCounter;
+    private final WordFromFile wordFromFile;
+    private final MaskWord maskWord;
+    private final Hangman hangman;
+
+    Game() {
+        correctCounter = 0;
+        this.wordFromFile = new WordFromFile();
+        this.maskWord = new MaskWord(wordFromFile.getSecretWord());
+        this.hangman = new Hangman();
+    }
 
     public static void start() {
-        correctCounter = 0;
         Scanner scanner = new Scanner(System.in);
+        InputHandler inputHandler = new InputHandler(scanner);
+
         boolean running = true;
 
-        WordFromFile wordFromFile = new WordFromFile();
-        MaskWord maskedWord = new MaskWord(wordFromFile.getSecretWord());
-        Hangman hangman = new Hangman(HANGMAN_START_POSITION);
+        Game gameState = new Game();
+        List<String> wrongLetterList = new ArrayList<>();
 
-        List<String> wrongLetterArray = new ArrayList<>();
-        Map<String, Integer> duplicateLetters = new HashMap<>();
-
-        //System.out.println(maskedWord.getSecretWord());
-        System.out.println(maskedWord.getMaskWord());
-        //hangman.drawHangman();
+        System.out.println(gameState.wordFromFile.getSecretWord());
+        System.out.println(gameState.maskWord);
 
         while (running) {
-            String userInput = scanner.nextLine().toUpperCase();
+            String userInput = inputHandler.getUserInput();
 
-            if (userInput.length() != 1 || !userInput.matches("[А-Яа-яЁё]")) {
-                System.out.println("Вам надо ввести одну русскую букву");
-                continue;
-            }
-
-            if (duplicateLetters.containsKey(userInput)) {
-                System.out.println("Вы уже вводили эту букву попробуйте еще раз");
-                continue;
-            }
-            duplicateLetters.put(userInput, 0);
-            if (!checkLetter(userInput, wordFromFile,maskedWord)) {
-                wrongLetterArray.add(hangman.getMistakeNumber(), String.valueOf(userInput.charAt(0)));
-                hangman.addMistakeNumber();
-                System.out.println("Такой буквы нет. Количество ошибок: " + hangman.getMistakeNumber());
-                printGameState(wrongLetterArray,maskedWord,hangman);
+            if (!gameState.checkLetter(userInput)) {
+                wrongLetterList.add(gameState.hangman.getMistakeNumber(), String.valueOf(userInput.charAt(0)));
+                gameState.hangman.addMistakeNumber();
+                System.out.println("Такой буквы нет. Количество ошибок: " + gameState.hangman.getMistakeNumber());
+                gameState.printGameState(wrongLetterList);
 
             } else {
-                System.out.println("Есть такая буква. Колличество отгаданных букв: " + correctCounter);
-                printGameState(wrongLetterArray,maskedWord,hangman);
+                System.out.println("Есть такая буква. Колличество отгаданных букв: " + gameState.correctCounter);
+                gameState.printGameState(wrongLetterList);
             }
-            if (hangman.getMistakeNumber() == hangman.maxMistakeNumber()) {
+            if (gameState.hangman.getMistakeNumber() == gameState.hangman.maxMistakeNumber()) {
                 System.out.println("Вы проиграли");
                 running = false;
             }
-            if (correctCounter == wordFromFile.getSecretWord().length){
+            if (gameState.correctCounter == gameState.wordFromFile.getSecretWord().length){
                 System.out.println("Вы выйграли");
                 running = false;
             }
         }
     }
 
-    private static boolean checkLetter(String input, WordFromFile wordFromFile, MaskWord maskedWord) {
-        char inputChar = input.charAt(0);
+    private boolean checkLetter(String userInput) {
+        char inputChar = userInput.charAt(0);
         boolean found = false;
-        char[] gameSecretWord = wordFromFile.getSecretWord();
+        char[] gameSecretWord = this.wordFromFile.getSecretWord();
         for (int i = 0; i < gameSecretWord.length; i++) {
             if (gameSecretWord[i] == inputChar) {
-                maskedWord.unmaskLetter(i, inputChar);
-                correctCounter++;
+                this.maskWord.unmaskLetter(i, inputChar);
+                this.correctCounter++;
                 found = true;
             }
         }
         return found;
     }
 
-    private static void printGameState(List<String> wrongLetterArray, MaskWord maskedWord, Hangman hangman) {
+    private void printGameState(List<String> wrongLetterArray) {
         System.out.println("Ошибочные буквы: " + wrongLetterArray);
-        System.out.println("Отгаданные буквы: " + maskedWord);
+        System.out.println("Отгаданные буквы: " + maskWord);
         hangman.drawHangman();
     }
 }

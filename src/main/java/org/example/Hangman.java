@@ -62,8 +62,7 @@ ________|___
 ________|___
 """,};
 
-    public Hangman(int mistakeNumber) {
-        this.mistakeNumber = mistakeNumber;
+    public Hangman() {
     }
 
     public void addMistakeNumber(){
@@ -75,7 +74,7 @@ ________|___
     }
 
     public int maxMistakeNumber(){
-        return hangman.length;
+        return hangman.length-1;
     }
     public void drawHangman() {
         System.out.println(hangman[mistakeNumber]);
