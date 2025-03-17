@@ -13,10 +13,6 @@ public class MaskWord {
         this.maskWord = maskWord();
     }
 
-    public char[] getMaskWord() {
-        return maskWord;
-    }
-
     @Override
     public String toString() {
         return String.valueOf(maskWord);
@@ -32,4 +28,12 @@ public class MaskWord {
         maskWord[index] = letter;
     }
 
+    public boolean checkFullUnmask(){
+        for (char c : maskWord) {
+            if (c == '_') {
+                return false;
+            }
+        }
+        return true;
+    }
 }

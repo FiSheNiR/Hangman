@@ -1,82 +1,72 @@
 package org.example;
 
-public class Hangman {
+public enum Hangman {
 
-    private int mistakeNumber;
-
-    private final String[] hangman = {
-            """
+    STEP_0("""
   ------|
         |
         |
         |
         |
 ________|___
-""",
-            """
+"""),
+    STEP_1("""
   ------|
   |     |
   0     |
         |
         |
 ________|___
-""",
-            """
+"""),
+    STEP_2("""
   ------|
   |     |
   0     |
   |     |
         |
 ________|___
-""",
-            """
+"""),
+    STEP_3("""
   ------|
   |     |
   0 /   |
   |     |
         |
 ________|___
-""",
-            """
+"""),
+    STEP_4("""
   ------|
   |     |
 \\ 0 /   |
   |     |
         |
 ________|___
-""",
-            """
+"""),
+    STEP_5("""
   ------|
   |     |
 \\ 0 /   |
   |     |
    \\    |
 ________|___
-""",
-            """
+"""),
+    STEP_6(
+        """
   ------|
   |     |
 \\ 0 /   |
   |     |
  / \\    |
 ________|___
-""",};
+""");
 
-    public Hangman() {
+    private final String image;
+
+    Hangman(String image) {
+        this.image = image;
     }
 
-    public void addMistakeNumber(){
-        mistakeNumber++;
-    }
-
-    public int getMistakeNumber(){
-        return mistakeNumber;
-    }
-
-    public int maxMistakeNumber(){
-        return hangman.length-1;
-    }
-    public void drawHangman() {
-        System.out.println(hangman[mistakeNumber]);
+    public String getImage() {
+        return image;
     }
 }
