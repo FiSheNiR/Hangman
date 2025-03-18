@@ -4,13 +4,13 @@ import java.util.Arrays;
 
 public class MaskWord {
 
-
+    private final char MASK_SYMBOL = '_';
     private final char[] secretWord;
     private final char[] maskWord;
 
     MaskWord(char[] secretWord) {
         this.secretWord = secretWord;
-        this.maskWord = maskWord();
+        this.maskWord = fillMaskArray();
     }
 
     @Override
@@ -18,9 +18,9 @@ public class MaskWord {
         return String.valueOf(maskWord);
     }
 
-    private char[] maskWord() {
+    private char[] fillMaskArray() {
         char[] maskedWord = new char[secretWord.length];
-        Arrays.fill(maskedWord, '_');
+        Arrays.fill(maskedWord, MASK_SYMBOL);
         return maskedWord;
     }
 
@@ -30,7 +30,7 @@ public class MaskWord {
 
     public boolean checkFullUnmask(){
         for (char c : maskWord) {
-            if (c == '_') {
+            if (c == MASK_SYMBOL) {
                 return false;
             }
         }

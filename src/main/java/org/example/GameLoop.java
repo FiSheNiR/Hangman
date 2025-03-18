@@ -1,25 +1,19 @@
 package org.example;
 
-import java.util.Scanner;
-
 public class GameLoop {
 
     public void start() {
-        Scanner scanner = new Scanner(System.in);
         boolean playable = true;
         while (playable) {
             System.out.println("Начать новую игру [н] Выйти [в]");
-            String input = scanner.next().toUpperCase();
-            switch (input) {
-                case "Н":
-                    initGame();
-                    break;
-                case "В":
+            InputHandler inputHandler = new InputHandler();
+            switch (inputHandler.getUserInput()) {
+                case "Н" -> initGame();
+                case "В" ->{
                     System.out.println("Выход");
                     playable = false;
-                    break;
-                default:
-                    System.out.println("Введите букву еще раз");
+                }
+                default -> System.out.println("Введите букву еще раз");
             }
         }
     }

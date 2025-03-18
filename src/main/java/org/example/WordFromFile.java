@@ -10,24 +10,28 @@ import java.util.regex.Pattern;
 
 public class WordFromFile {
 
-    private static final String FILE_PATH = "src/main/java/org/example/WordsList.txt";
+    private final String FILE_PATH = "src/main/java/org/example/WordsList.txt";
+    private final int MIN_WORD_LENGTH = 5;
     private final char[] secretWord = getRandomWord();
 
-    public static char[] getRandomWord() {
+    public char[] getSecretWord() {
+        return secretWord;
+    }
+
+    private char[] getRandomWord() {
         List<String> wordsList = readWordsFromFile();
         return randomWord(wordsList).toUpperCase().toCharArray();
     }
 
-    private static List<String> readWordsFromFile() {
+    private List<String> readWordsFromFile() {
         List<String> words = new ArrayList<>();
         Pattern pattern = Pattern.compile("[^а-яА-Яa-zA-Z]+");
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(WordFromFile.FILE_PATH, java.nio.charset.StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH, java.nio.charset.StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] wordArray = pattern.split(line);
                 for (String word : wordArray) {
-                    if (word.length() >= 5 && word.matches("[а-яА-Я]+")) {
+                    if (word.length() >= MIN_WORD_LENGTH && word.matches("[а-яА-Я]+")) {
                         words.add(word);
                     }
                 }
@@ -39,12 +43,8 @@ public class WordFromFile {
         return words;
     }
 
-    private static String randomWord(List<String> words) {
+    private String randomWord(List<String> words) {
         Random random = new Random();
         return words.get(random.nextInt(words.size()));
-    }
-
-    public char[] getSecretWord() {
-        return secretWord;
     }
 }

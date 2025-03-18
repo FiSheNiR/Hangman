@@ -6,12 +6,12 @@ import java.util.Set;
 
 public class InputHandler {
 
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
     private final Set<String> duplicateLettersSet;
+    private final String RUSSIAN_LETTER_REGEX = "[А-Яа-яЁё]";
 
-    public InputHandler(Scanner scanner) {
+    public InputHandler() {
         this.duplicateLettersSet = new HashSet<>();
-        this.scanner = scanner;
     }
 
     public String getUserInput() {
@@ -20,15 +20,16 @@ public class InputHandler {
         while(true) {
             String userInput = scanner.nextLine().toUpperCase();
 
-            if (userInput.length() != 1 || !userInput.matches("[А-Яа-яЁё]")) {
+            if (userInput.length() != 1 || !userInput.matches(RUSSIAN_LETTER_REGEX)) {
                 System.out.println("Вам надо ввести одну русскую букву");
                 continue;
             }
 
-            if (!duplicateLettersSet.add(userInput)) {
+            else if (!duplicateLettersSet.add(userInput)) {
                 System.out.println("Вы уже вводили эту букву попробуйте еще раз");
                 continue;
             }
+
             duplicateLettersSet.add(userInput);
             return userInput;
         }

@@ -7,6 +7,7 @@ public class MistakeHandler {
 
     private int mistakeNumber;
     private final List<String> wrongLetterList = new ArrayList<>();
+    private final int MAX_MISTAKES = Hangman.values().length - 1;
 
     public int getMistakeNumber(){
         return mistakeNumber;
@@ -17,7 +18,7 @@ public class MistakeHandler {
     }
 
     public int maxMistakeNumber(){
-        return Hangman.values().length - 1;
+        return MAX_MISTAKES;
     }
 
     public void containLetter(String userInput, WordFromFile wordFromFile, MaskWord maskWord) {

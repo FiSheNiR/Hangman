@@ -1,15 +1,12 @@
 package org.example;
 
-import java.util.*;
-
 public class Game {
 
     private final WordFromFile wordFromFile = new WordFromFile();
     private final MaskWord maskWord = new MaskWord(wordFromFile.getSecretWord());
     private final MistakeHandler mistakeHandler = new MistakeHandler();
     private final OutputManager outputManager = new OutputManager();
-    private final Scanner scanner = new Scanner(System.in);
-    private final InputHandler inputHandler = new InputHandler(scanner);
+    private final InputHandler inputHandler = new InputHandler();
 
     public void start() {
 
@@ -26,12 +23,10 @@ public class Game {
 
     private boolean gameResult(){
         if (mistakeHandler.getMistakeNumber() == mistakeHandler.maxMistakeNumber()) {
-            System.out.print("Вы проиграли. Загаданнаое слово: ");
-            System.out.print(wordFromFile.getSecretWord());
-            System.out.println();
+            System.out.printf("Вы проиграли. Загаданнаое слово: %s%n" , new String(wordFromFile.getSecretWord()));
             return false;
         }
-        if (maskWord.checkFullUnmask()){
+        else if (maskWord.checkFullUnmask()){
             System.out.println("Вы выйграли");
             return false;
         }
