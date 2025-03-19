@@ -5,22 +5,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.regex.Pattern;
 
-public class WordFromFile {
+public class WordsListFromFile {
 
     private final String FILE_PATH = "src/main/java/org/example/WordsList.txt";
     private final int MIN_WORD_LENGTH = 5;
-    private final char[] secretWord = getRandomWord();
+    private final List<String> wordsList = readWordsFromFile();
 
-    public char[] getSecretWord() {
-        return secretWord;
-    }
-
-    private char[] getRandomWord() {
-        List<String> wordsList = readWordsFromFile();
-        return randomWord(wordsList).toUpperCase().toCharArray();
+    public List<String> getWordsList() {
+        return wordsList;
     }
 
     private List<String> readWordsFromFile() {
@@ -41,10 +35,5 @@ public class WordFromFile {
         }
 
         return words;
-    }
-
-    private String randomWord(List<String> words) {
-        Random random = new Random();
-        return words.get(random.nextInt(words.size()));
     }
 }

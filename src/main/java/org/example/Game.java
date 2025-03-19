@@ -2,20 +2,25 @@ package org.example;
 
 public class Game {
 
-    private final WordFromFile wordFromFile = new WordFromFile();
-    private final MaskWord maskWord = new MaskWord(wordFromFile.getSecretWord());
+    private final SecretWord secretWord;
+    private final MaskWord maskWord;
     private final MistakeHandler mistakeHandler = new MistakeHandler();
     private final OutputManager outputManager = new OutputManager();
     private final InputHandler inputHandler = new InputHandler();
 
+    public Game(WordsListFromFile wordsListFromFile) {
+        this.secretWord = new SecretWord(wordsListFromFile);
+        this.maskWord = new MaskWord(secretWord.getSecretWord());
+    }
+
     public void start() {
 
-        System.out.println(wordFromFile.getSecretWord());
-        System.out.println(maskWord);
+        //System.out.println(secretWord.getSecretWord());
+        outputManager.printGameState(maskWord, mistakeHandler);
 
         while (gameResult()) {
             String userInput = inputHandler.getUserInput();
-            mistakeHandler.containLetter(userInput, wordFromFile, maskWord);
+            mistakeHandler.containLetter(userInput, secretWord, maskWord);
             outputManager.printGameState(maskWord, mistakeHandler);
         }
 
@@ -23,10 +28,10 @@ public class Game {
 
     private boolean gameResult(){
         if (mistakeHandler.getMistakeNumber() == mistakeHandler.maxMistakeNumber()) {
-            System.out.printf("Вы проиграли. Загаданнаое слово: %s%n" , new String(wordFromFile.getSecretWord()));
+            System.out.printf("Вы проиграли. Загаданнаое слово: %s%n" , new String(secretWord.getSecretWord()));
             return false;
         }
-        else if (maskWord.checkFullUnmask()){
+        if (maskWord.checkFullUnmask()){
             System.out.println("Вы выйграли");
             return false;
         }

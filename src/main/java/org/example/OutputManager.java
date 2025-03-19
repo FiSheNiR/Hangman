@@ -3,7 +3,7 @@ package org.example;
 public class OutputManager {
 
     public void printGameState(MaskWord maskWord, MistakeHandler mistakeHandler) {
-        System.out.printf("Ошибочные буквы: %s%n ", mistakeHandler.getWrongLetterList());
+        System.out.printf("Ошибочные буквы: %s%n", mistakeHandler.getWrongLetterList());
         System.out.printf("Отгаданные буквы: %s%n", maskWord);
         drawHangman(mistakeHandler);
     }

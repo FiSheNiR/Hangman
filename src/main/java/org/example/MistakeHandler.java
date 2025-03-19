@@ -21,8 +21,8 @@ public class MistakeHandler {
         return MAX_MISTAKES;
     }
 
-    public void containLetter(String userInput, WordFromFile wordFromFile, MaskWord maskWord) {
-        if (!checkLetter(userInput, wordFromFile, maskWord)) {
+    public void containLetter(String userInput, SecretWord secretWord, MaskWord maskWord) {
+        if (!checkLetter(userInput, secretWord, maskWord)) {
             wrongLetterList.add(mistakeNumber, String.valueOf(userInput.charAt(0)));
             mistakeNumber++;
             System.out.println("Такой буквы нет. Количество ошибок: " + mistakeNumber);
@@ -31,10 +31,10 @@ public class MistakeHandler {
         }
     }
 
-    private boolean checkLetter(String userInput, WordFromFile wordFromFile, MaskWord maskWord) {
+    private boolean checkLetter(String userInput, SecretWord secretWord, MaskWord maskWord) {
         char inputChar = userInput.charAt(0);
         boolean found = false;
-        char[] gameSecretWord = wordFromFile.getSecretWord();
+        char[] gameSecretWord = secretWord.getSecretWord();
         for (int i = 0; i < gameSecretWord.length; i++) {
             if (gameSecretWord[i] == inputChar) {
                 maskWord.unmaskLetter(i, inputChar);

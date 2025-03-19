@@ -25,7 +25,7 @@ public class InputHandler {
                 continue;
             }
 
-            else if (!duplicateLettersSet.add(userInput)) {
+            if (!duplicateLettersSet.add(userInput)) {
                 System.out.println("Вы уже вводили эту букву попробуйте еще раз");
                 continue;
             }
