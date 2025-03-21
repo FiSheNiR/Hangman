@@ -2,14 +2,16 @@ package org.example;
 
 public class OutputManager {
 
-    public void printGameState(MaskWord maskWord, MistakeHandler mistakeHandler) {
-        System.out.printf("Ошибочные буквы: %s%n", mistakeHandler.getWrongLetterList());
-        System.out.printf("Отгаданные буквы: %s%n", maskWord);
-        drawHangman(mistakeHandler);
+    public void printGameState(MaskWord maskWord, LetterStorage letterStorage, Hangman hangman) {
+        System.out.printf("Ошибочные буквы: %s %n", letterStorage.getWrongLetters());
+        System.out.printf("Отгаданные буквы: %s %n", maskWord);
+        drawHangman(hangman);
     }
 
-    private void drawHangman (MistakeHandler mistakeHandler) {
-        System.out.println(Hangman.values()[mistakeHandler.getMistakeNumber()].getImage());
+    private void drawHangman (Hangman hangman) {
+        int mistakeNumber = hangman.getCurrentHangmanState();
+        String hangmanImage = Hangman.getImage(mistakeNumber);
+        System.out.println(hangmanImage);
     }
 
 }

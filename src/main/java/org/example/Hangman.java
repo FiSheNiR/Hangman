@@ -1,56 +1,55 @@
 package org.example;
 
-public enum Hangman {
-
-    STEP_0("""
+public class Hangman {
+    private static final String[] PICTURES = {
+    """
   ------|
         |
         |
         |
         |
 ________|___
-"""),
-    STEP_1("""
-  ------|
-  |     |
-  0     |
-        |
-        |
-________|___
-"""),
-    STEP_2("""
+""",
+    """
   ------|
   |     |
   0     |
+        |
+        |
+________|___
+""",
+    """
+  ------|
+  |     |
+  0     |
   |     |
         |
 ________|___
-"""),
-    STEP_3("""
+""",
+    """
   ------|
   |     |
   0 /   |
   |     |
         |
 ________|___
-"""),
-    STEP_4("""
+""",
+    """
   ------|
   |     |
 \\ 0 /   |
   |     |
         |
 ________|___
-"""),
-    STEP_5("""
+""",
+    """
   ------|
   |     |
 \\ 0 /   |
   |     |
    \\    |
 ________|___
-"""),
-    STEP_6(
+""",
         """
   ------|
   |     |
@@ -58,15 +57,25 @@ ________|___
   |     |
  / \\    |
 ________|___
-""");
+"""
+};
 
-    private final String image;
+    private int currentHangmanState = 0;
+    private final int maxHangmanState = PICTURES.length-1;
 
-    Hangman(String image) {
-        this.image = image;
+    public int getCurrentHangmanState() {
+        return currentHangmanState;
     }
 
-    public String getImage() {
-        return image;
+    public void addHangmanState() {
+        currentHangmanState++;
+    }
+
+    public boolean isAlive() {
+        return currentHangmanState < maxHangmanState;
+    }
+
+    public static String getImage(int pictureNumber) {
+        return PICTURES[pictureNumber];
     }
 }

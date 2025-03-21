@@ -5,27 +5,22 @@ import java.util.Arrays;
 public class MaskWord {
 
     private final char MASK_SYMBOL = '_';
-    private final char[] secretWord;
+    private final char[] gameSecretWord;
     private final char[] maskWord;
 
-    MaskWord(char[] secretWord) {
-        this.secretWord = secretWord;
+    MaskWord(char[] gameSecretWord) {
+        this.gameSecretWord = gameSecretWord;
         this.maskWord = fillMaskArray();
     }
 
-    @Override
-    public String toString() {
-        return String.valueOf(maskWord);
+    public char[] getGameSecretWord() {
+        return gameSecretWord;
     }
 
     private char[] fillMaskArray() {
-        char[] maskedWord = new char[secretWord.length];
+        char[] maskedWord = new char[gameSecretWord.length];
         Arrays.fill(maskedWord, MASK_SYMBOL);
         return maskedWord;
-    }
-
-    public void unmaskLetter(int index, char letter) {
-        maskWord[index] = letter;
     }
 
     public boolean checkFullUnmask(){
@@ -35,5 +30,22 @@ public class MaskWord {
             }
         }
         return true;
+    }
+
+    public boolean IsLetterInSecretWord(String userInput) {
+        char inputChar = userInput.charAt(0);
+        boolean found = false;
+        for (int i = 0; i < gameSecretWord.length; i++) {
+            if (gameSecretWord[i] == inputChar) {
+                maskWord[i] = inputChar;
+                found = true;
+            }
+        }
+        return found;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(maskWord);
     }
 }
